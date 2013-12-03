@@ -5,6 +5,11 @@ module EasyIndexer
       self
     end
 
+    def match(key)
+      engine.query { match :_all, key }
+      self
+    end
+
     def randomly_ordered
       engine.sort do
         by _script: {
