@@ -21,6 +21,23 @@ module EasyIndexer
       updater.remove(element)
     end
 
+    def self.index_name(index_name)
+      define_method "base_name" do
+        instance_variable_set("@base_name", index_name)
+      end
+    end
+
+    def self.scope(name, condition = {})
+      define_method name do
+        engine.filter :term, condition
+        self
+      end
+    end
+
+    def results
+      engine.results
+    end
+
   protected
 
     def bootstrap!
@@ -29,19 +46,15 @@ module EasyIndexer
     end
 
     def mappings
-      JSON.parse(File.open("#{Rails.root}/config/indexes/#{@index_name}.json").read)
+      JSON.parse(File.open("#{Rails.root}/config/indexes/#{base_name}.json").read)
     end
 
     def index_name
-      "#{@index_name}-#{Rails.env}"
+      "#{base_name}-#{Rails.env}"
     end
 
     def engine
       @engine ||= Tire::Search::Search.new(index_name)
-    end
-
-    def results
-      engine.results
     end
 
     def paginate(criteria)

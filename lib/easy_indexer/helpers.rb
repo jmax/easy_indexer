@@ -1,8 +1,8 @@
 module EasyIndexer
   module Helpers
-    def global_search
+    def all
       engine.query { all }
-      engine.results
+      self
     end
 
     def randomly_ordered
