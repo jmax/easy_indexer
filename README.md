@@ -51,6 +51,65 @@ be stored in the file config/indexes/pets.json with the following structure:
 }
 ```
 
+On the other hand, in the Pets model, you have to add the following three things:
+
+```
+include EasyIndexer::Callbacks
+```
+to include the after_save and before_destroy callbacks,
+
+```
+def index
+  @index ||= PetsIndex.new
+end
+```
+to perform the indexation, and
+
+```
+def to_indexed_json
+  {
+    name: name,
+    published_on: published_on,
+    removed: removed
+  }.to_json
+end
+```
+to tell which attributes will be returned in a search.
+
+How to index
+------------
+
+It is recommended to write a rake task to perform the indexation.
+From within the task
+
+Instantiate a PetsIndex object
+```
+indexer = PetsIndex.new
+```
+
+Call the rebuild! method to clean the index.
+```
+indexer.rebuild!
+```
+
+Iterate over your Pets model, and call the pets
+```
+<--- Example using ActiveRecord ---->
+Pets.all.find_in_batches(batch_size: 100) do |pets|
+  indexer.source.import pets
+end
+
+<--- Example using Mongoid ---->
+indexer.source.import Pets.all
+```
+
+Finally call
+```
+indexer.source.refresh
+```
+
+And you are good to go!
+
 Goodies
 -------
 
@@ -64,18 +123,34 @@ class PetsIndex < EasyIndexer::Engine
 end
 ```
 
-You'll be able to perform a search like this:
-
+To perform a search, you only have to type
 ```
 index = PetsIndex.new
-index.all.results
+index.match 'Chow Chow'
+```
+Internally, the match method perform a match: _all query.
+
+
+Alternatively, if you want to retrieve all the pets, type
+```
+index = PetsIndex.new
+index.all
 ```
 
 In case you need to produce a randomly ordered results list, you can try:
 
 ```
 index = PetsIndex.new
-index.all.randomly_ordered.results
+index.all.randomly_ordered
+```
+
+To save all the results out of a search, chain the results method like so
+```
+pets = PetsIndex.all.results
+or
+pets = PetsIndex.match('Chow Chow').results
+or
+pets_randomly_ordered = PetsIndex.all.randomly_ordered.results
 ```
 
 Scopes
