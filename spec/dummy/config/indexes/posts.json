@@ -1,0 +1,10 @@
+{
+  "post": {
+    "properties": {
+      "title": { "type": "string", "index": "not_analyzed" },
+      "body":  { "type": "string", "analyzer": "snowball" },
+      "published": { "type": "string", "index": "not_analyzed" },
+      "points": { "type": "integer", "index": "not_analyzed" }
+    }
+  }
+}
