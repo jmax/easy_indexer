@@ -64,7 +64,7 @@ module EasyIndexer
     end
 
     def client
-      @client ||= Elasticsearch::Client.new(log: true)
+      @client ||= Elasticsearch::Client.new(url: host_url, log: true)
     end
 
     def already_defined?
@@ -73,6 +73,10 @@ module EasyIndexer
 
     def type_for(record)
       record.class.to_s.downcase
+    end
+
+    def host_url
+      ENV['ELASTICSEARCH_URL'] || "localhost:9200"
     end
   end
 end

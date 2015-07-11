@@ -36,7 +36,7 @@ This will install the unreleased version of the gem which is recommendable given
 Basics
 -------
 
-There three parts you need to consider for this integration:
+There are three parts you will need to consider for this integration:
 
 * mappings: they must be defined in JSON format and must be stored in config/indexes folder.
 
@@ -157,6 +157,14 @@ end
 ```
 
 Now, the model will only update the index with published posts.
+
+
+Running EasyIndexer on production environments
+-------
+
+By default, EasyIndexer will connect to an ElasticSearch node running on locahost:9200. This will be helpful for development and test environments, however it won't work on production environment where ElasticSearch node will be most likely on an external server.
+
+To sort this out, you will need to define and env variable named ELASTICSEARCH_URL which will be use to specify the node location.
 
 
 License
