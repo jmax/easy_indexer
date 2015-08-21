@@ -9,6 +9,10 @@ module EasyIndexer
       @response.hits.hits.map(&:_source)
     end
 
+    def aggregations
+      @response.aggregations
+    end
+
     def count
       @response.hits.total
     end
