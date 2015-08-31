@@ -3,10 +3,13 @@ class PostsIndex < EasyIndexer::Engine
 
   def search(key, from = 0, to = 10)
     query = {
-      query: { filtered: {
-        query:  { match: { body: key } },
-        filter: { range: { points: { gte: from, lte: to } } }
-      } }
+      query: {
+        filtered: {
+          query:  { match: { _all: key } }
+        }
+      },
+      size: to,
+      from: from
     }
 
     request(query)
