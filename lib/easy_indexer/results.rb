@@ -5,6 +5,10 @@ module EasyIndexer
       @response = Hashie::Mash.new(es_response)
     end
 
+    def raw_results
+      @response
+    end
+
     def results
       @response.hits.hits.map(&:_source)
     end
