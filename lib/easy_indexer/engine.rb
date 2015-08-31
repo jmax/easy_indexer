@@ -64,7 +64,7 @@ module EasyIndexer
     end
 
     def client
-      @client ||= Elasticsearch::Client.new(url: host_url, log: true)
+      @client ||= Elasticsearch::Client.new(url: host_url, log: log_for_environment)
     end
 
     def already_defined?
@@ -77,6 +77,10 @@ module EasyIndexer
 
     def host_url
       ENV['ELASTICSEARCH_URL'] || "localhost:9200"
+    end
+
+    def log_for_environment
+      Rails.env.test? ? false : true
     end
   end
 end
