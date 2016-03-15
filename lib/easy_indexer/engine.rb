@@ -18,13 +18,13 @@ module EasyIndexer
     end
 
     def store(record)
-      client.index( index: index_name, type: type_for(record),
+      client.index( index: index_name, type: mappings.keys.first,
         id: record.id, body: record.as_indexed_json )
     end
 
     def delete(record)
       client.delete(
-        index: index_name, type: type_for(record), id: record.id
+        index: index_name, type: mappings.keys.first, id: record.id
       )
     end
 
@@ -47,14 +47,13 @@ module EasyIndexer
   protected
     def bootstrap!
       unless already_defined?
-        client.indices.create(
-          index: index_name, body: { mappings: mappings }
+        client.indices.create( index: index_name, body: { mappings: mappings }
         )
       end
     end
 
     def mappings
-      JSON.parse(
+      @mappings ||= JSON.parse(
         File.open("#{Rails.root}/config/indexes/#{base_name}.json").read
       )
     end
@@ -69,10 +68,6 @@ module EasyIndexer
 
     def already_defined?
       client.indices.exists( index: index_name )
-    end
-
-    def type_for(record)
-      record.class.to_s.downcase
     end
 
     def host_url

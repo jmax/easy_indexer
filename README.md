@@ -17,8 +17,8 @@ Dependencies
 -------
 
 * ruby 2.0.0 or higher
-* elasticsearch 1.0.12 or higher
-* rails 2.0.0 or higher
+* elasticsearch 1.0.15 or higher
+* rails 4.2.0 or higher
 
 
 Installation

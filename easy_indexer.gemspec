@@ -15,13 +15,12 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
 
-  s.add_dependency "rails", ">= 4.0.0"
-  s.add_dependency "elasticsearch", ">= 1.0.1"
+  s.add_dependency "rails", ">= 4.2.0"
+  s.add_dependency "elasticsearch", ">= 1.0.15"
   s.add_dependency "hashie"
 
   s.add_development_dependency "sqlite3"
-  s.add_development_dependency "rspec-rails",      ">= 2.14.1"
-  s.add_development_dependency "database_cleaner", ">= 1.2.0"
-  s.add_development_dependency "shoulda-matchers", ">= 2.5.0"
-  s.add_development_dependency "faker"
+  s.add_development_dependency "rspec-rails",      '~> 3.0'
+  s.add_development_dependency "database_cleaner", ">= 1.5.1"
+  s.add_development_dependency "shoulda-matchers", '~> 3.1'
 end
